@@ -6,8 +6,8 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap%27);
- 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
+
 :root {
 --bg: #f0f2f5;
 --surface: #ffffff;
@@ -27,10 +27,10 @@
 --radius: 14px;
 --shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
- 
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
- 
+
 /* ── LOGIN ── */
 #loginBox {
 position: fixed; inset: 0; background: linear-gradient(135deg,#0B3D91 0%,#1a6dbf 100%);
@@ -55,7 +55,7 @@ transition: background .2s;
 }
 .login-card button:hover { background: #082d6e; }
 .login-error { color: #e53935; font-size: 12px; margin-top: 10px; height: 16px; }
- 
+
 /* ── LOADING ── */
 #loadingOverlay {
 position: fixed; inset: 0; background: rgba(0,0,0,0.35);
@@ -68,10 +68,10 @@ border-radius: 50%; animation: spin .75s linear infinite; margin: 0 auto 14px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner-box p { font-size: 13px; color: var(--text2); }
- 
+
 /* ── LAYOUT ── */
 #app { display: none; min-height: 100vh; }
- 
+
 .topbar {
 background: var(--navy); color: white; padding: 0 28px;
 display: flex; align-items: center; justify-content: space-between; height: 58px;
@@ -88,9 +88,9 @@ box-shadow: 0 2px 10px rgba(11,61,145,0.3);
 .btn-config { background: rgba(255,255,255,.15); border: none; color: white; padding: 7px 13px;
 border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; }
 .btn-config:hover { background: rgba(255,255,255,.25); }
- 
+
 .main { padding: 22px 28px; }
- 
+
 /* ── CONFIG PANEL ── */
 #configPanel {
 background: #fffde7; border: 1px solid #ffe082; border-radius: var(--radius);
@@ -101,7 +101,7 @@ padding: 16px 20px; margin-bottom: 18px; display: none;
 #configPanel input { flex: 1; padding: 9px 12px; border: 1px solid #ffe082; border-radius: 8px; font-size: 13px; }
 #configPanel button { padding: 9px 16px; background: #F9A825; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
 #configPanel .note { font-size: 11px; color: #888; margin-top: 8px; line-height: 1.5; }
- 
+
 /* ── FILTER BAR ── */
 .filter-bar {
 background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
@@ -125,7 +125,7 @@ color: var(--text); outline: none; min-width: 140px; transition: border .2s;
 .btn-reload:hover { background: var(--border); }
 .btn-dl { background: var(--navy); color: white; }
 .btn-dl:hover { background: #082d6e; }
- 
+
 /* ── KPI CARDS ── */
 .kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; margin-bottom: 18px; }
 .kpi-card {
@@ -145,7 +145,7 @@ border-top: 5px solid transparent;
 .s-verde   { background: var(--green); }
 .s-amarillo{ background: var(--yellow); }
 .s-rojo    { background: var(--red); }
- 
+
 /* ── PREV ROW ── */
 .prev-row { display: grid; grid-template-columns: 1fr 2fr; gap: 14px; margin-bottom: 18px; }
 .surface-card {
@@ -153,19 +153,19 @@ background: var(--surface); border-radius: var(--radius); box-shadow: var(--shad
 }
 .surface-card h3 { font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
 .prev-val { font-size: 24px; font-weight: 700; font-family: 'DM Mono', monospace; margin-top: 6px; }
- 
+
 /* ── TABLES ── */
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 thead th { background: var(--surface2); color: var(--text2); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; padding: 8px 10px; text-align: left; border-bottom: 1.5px solid var(--border); }
 tbody td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
 tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover { background: var(--surface2); }
- 
+
 /* ── CHARTS ROW ── */
 .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
 .chart-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; }
 .chart-card h3 { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; text-align: center; margin-bottom: 12px; }
- 
+
 /* ── DETAIL TABLE ── */
 .detail-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 20px; }
 .detail-card h3 { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
@@ -174,12 +174,12 @@ tbody tr:hover { background: var(--surface2); }
 .pag button { border: 1.5px solid var(--border); border-radius: 8px; padding: 5px 12px; font-size: 12px; background: var(--surface2); color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; }
 .pag button.active { background: var(--navy); color: white; border-color: var(--navy); }
 .pag button:hover:not(.active) { background: var(--border); }
- 
+
 .empty-msg { text-align: center; padding: 28px; color: var(--text2); font-size: 13px; }
 </style>
 </head>
 <body>
- 
+
 <!-- LOADING -->
 <div id="loadingOverlay">
 <div class="spinner-box">
@@ -187,7 +187,7 @@ tbody tr:hover { background: var(--surface2); }
 <p id="loadingMsg">Cargando...</p>
 </div>
 </div>
- 
+
 <!-- LOGIN -->
 <div id="loginBox">
 <div class="login-card">
@@ -199,15 +199,15 @@ onkeydown="if(event.key==='Enter') login()">
 <div class="login-error" id="loginError"></div>
 </div>
 </div>
- 
+
 <!-- APP -->
 <div id="app">
- 
+
 <!-- TOPBAR -->
 <div class="topbar">
 <div class="topbar-left">
-<img src="https://images.squarespace-cdn.com/content/v1/620ed8b50c43390f3c3413d1/a1c81e4e-aba8-48b0-adcd-9600d43276da/main_logo_color_footer.png?format=300w%22
-onerror="this.style.display='none'">
+<img src="https://images.squarespace-cdn.com/content/v1/620ed8b50c43390f3c3413d1/a1c81e4e-aba8-48b0-adcd-9600d43276da/main_logo_color_footer.png?format=300w"
+ onerror="this.style.display='none'">
 <span class="topbar-title">📊 Reporte Semanal de Mantenimiento</span>
 </div>
 <div class="topbar-right">
@@ -215,9 +215,9 @@ onerror="this.style.display='none'">
 <button class="btn-config" onclick="toggleConfig()">⚙️ Config URL</button>
 </div>
 </div>
- 
+
 <div class="main">
- 
+
 <!-- CONFIG PANEL -->
 <div id="configPanel">
 <strong>⚙️ Configuración — URL del Apps Script Web App</strong>
@@ -230,7 +230,7 @@ Pasos en Google Sheets: <b>Extensiones → Apps Script</b> → pegar el código 
 <b>Implementar → Nueva implementación → Tipo: App web → Ejecutar como: Yo → Quién tiene acceso: Cualquier usuario → Implementar → copiar URL</b>
 </div>
 </div>
- 
+
 <!-- FILTROS -->
 <div class="filter-bar">
 <div class="filter-group">
@@ -254,7 +254,7 @@ Pasos en Google Sheets: <b>Extensiones → Apps Script</b> → pegar el código 
 <button class="btn btn-dl" onclick="descargarCSV()">⬇ Descargar CSV</button>
 </div>
 </div>
- 
+
 <!-- KPIs -->
 <div class="kpi-grid">
 <div class="kpi-card blue">
@@ -280,7 +280,7 @@ Pasos en Google Sheets: <b>Extensiones → Apps Script</b> → pegar el código 
 <div class="kpi-val sm" id="kMaq">—</div>
 </div>
 </div>
- 
+
 <!-- PREVENTIVOS -->
 <div class="prev-row">
 <div class="surface-card">
@@ -294,7 +294,7 @@ Pasos en Google Sheets: <b>Extensiones → Apps Script</b> → pegar el código 
 </table>
 </div>
 </div>
- 
+
 <!-- GRÁFICAS -->
 <div class="charts-row">
 <div class="chart-card">
@@ -310,14 +310,14 @@ Pasos en Google Sheets: <b>Extensiones → Apps Script</b> → pegar el código 
 </div>
 </div>
 </div>
- 
+
 <div class="chart-card" style="margin-bottom:18px">
 <h3>Tendencia diaria de fallas correctivas</h3>
 <div style="position:relative;height:170px">
 <canvas id="cTend" role="img" aria-label="Tendencia diaria">Gráfica de línea.</canvas>
 </div>
 </div>
- 
+
 <!-- TABLA DETALLE -->
 <div class="detail-card">
 <h3>Detalle de órdenes</h3>
@@ -329,10 +329,10 @@ Pasos en Google Sheets: <b>Extensiones → Apps Script</b> → pegar el código 
 </div>
 <div class="pag" id="paginacion"></div>
 </div>
- 
+
 </div><!-- /main -->
 </div><!-- /app -->
- 
+
 <script>
 // =============================================
 //  CONFIGURACIÓN
@@ -343,7 +343,7 @@ let datosBase = [];
 let charts = {};
 let pgActual = 0;
 const PG = 8;
- 
+
 // =============================================
 //  LOGIN
 // =============================================
@@ -363,7 +363,7 @@ function login() {
     setTimeout(() => document.getElementById('loginError').textContent = '', 2500);
   }
 }
- 
+
 // =============================================
 //  CONFIG
 // =============================================
@@ -372,7 +372,7 @@ function toggleConfig() {
   p.style.display = p.style.display === 'none' ? 'block' : 'none';
   if (SCRIPT_URL) document.getElementById('scriptUrl').value = SCRIPT_URL;
 }
- 
+
 function guardarConfig() {
   const url = document.getElementById('scriptUrl').value.trim();
   if (!url.includes('script.google.com')) { alert('URL inválida — debe contener script.google.com'); return; }
@@ -382,13 +382,13 @@ function guardarConfig() {
   setStatus('ok', '✅ URL guardada');
   cargarDatos();
 }
- 
+
 function setStatus(type, msg) {
   const el = document.getElementById('statusTag');
   el.className = 'tag-status tag-' + type;
   el.textContent = msg;
 }
- 
+
 // =============================================
 //  API → Apps Script
 // =============================================
@@ -400,7 +400,7 @@ async function api(params) {
   if (!json.success) throw new Error(json.error || 'Error desconocido');
   return json;
 }
- 
+
 // =============================================
 //  LOADING
 // =============================================
@@ -409,7 +409,7 @@ function showLoading(msg = 'Cargando...') {
   document.getElementById('loadingOverlay').style.display = 'flex';
 }
 function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
- 
+
 // =============================================
 //  CARGAR DATOS
 // =============================================
@@ -437,7 +437,7 @@ async function cargarDatos() {
     hideLoading();
   }
 }
- 
+
 // =============================================
 //  POBLAR FILTROS
 // =============================================
@@ -445,14 +445,14 @@ function poblarFiltros() {
   const areas = [...new Set(datosBase.map(r => r.area))].filter(Boolean).sort();
   const sel = document.getElementById('selArea');
   sel.innerHTML = '<option>Todas</option>' + areas.map(a => `<option>${a}</option>`).join('');
- 
+
   const fechas = datosBase.map(r => r.fecha).filter(Boolean).sort();
   if (fechas.length) {
     document.getElementById('fIni').value = fechas[0];
     document.getElementById('fFin').value = fechas[fechas.length - 1];
   }
 }
- 
+
 // =============================================
 //  FILTRAR
 // =============================================
@@ -467,7 +467,7 @@ function filtrar() {
     return true;
   });
 }
- 
+
 // =============================================
 //  MINUTOS OPERATIVOS — considera calendario real
 //  Lunes–Viernes : hDia completas
@@ -492,7 +492,7 @@ function calcularMinutosOperativos(inicio, fin, horasPorDia) {
   }
   return minutos;
 }
- 
+
 // =============================================
 //  ACTUALIZAR TODO
 // =============================================
@@ -502,7 +502,7 @@ function actualizar() {
   actualizarGraficas(df);
   renderTabla(df);
 }
- 
+
 // =============================================
 //  KPIs
 // =============================================
@@ -511,54 +511,54 @@ function cnt(arr, fn) {
   arr.forEach(r => { const k = fn(r); m[k] = (m[k] || 0) + 1; });
   return m;
 }
- 
+
 function actualizarKPIs(df) {
   const corr   = df.filter(r => r.tipo_mantenimiento === 'correctivo');
   const fallas = corr.length;
   const dt     = corr.reduce((s, r) => s + r.tiempo_min, 0);
- 
+
   document.getElementById('kFallas').textContent = fallas;
   document.getElementById('kDT').textContent = dt.toFixed(0);
- 
+
   if (fallas > 0) {
     // ── MTTR ──────────────────────────────────────
     const mttr = dt / fallas;
     document.getElementById('kMTTR').textContent = mttr.toFixed(1);
     document.getElementById('sMTTR').className =
       'semaforo ' + (mttr <= 40 ? 's-verde' : mttr <= 60 ? 's-amarillo' : 's-rojo');
- 
+
     // ── MTBF — período basado en el filtro de fechas,
     //    excluyendo domingos y con sábado a medio tiempo ──
     const hDia   = parseFloat(document.getElementById('hDia').value) || 16;
     const fIni   = document.getElementById('fIni').value;
     const fFin   = document.getElementById('fFin').value;
- 
+
     const tTotal = calcularMinutosOperativos(fIni, fFin, hDia); // minutos operativos reales del período
     const tOp    = Math.max(0, tTotal - dt);                     // descontando downtime
     const mtbf   = (tOp / fallas) / 60;                         // convertir a horas
- 
+
     document.getElementById('kMTBF').textContent = mtbf.toFixed(2);
     const u1 = hDia * 0.30, u2 = hDia * 0.15;
     document.getElementById('sMTBF').className =
       'semaforo ' + (mtbf >= u1 ? 's-verde' : mtbf >= u2 ? 's-amarillo' : 's-rojo');
- 
+
     // ── Máquina crítica ───────────────────────────
     const maqCnt = cnt(corr, r => r.maquina);
     const top    = Object.entries(maqCnt).sort((a,b) => b[1]-a[1])[0];
     document.getElementById('kMaq').textContent = top ? `${top[0]} (${top[1]} fallas)` : '—';
- 
+
   } else {
     ['kMTTR','kMTBF','kMaq'].forEach(id => document.getElementById(id).textContent = '—');
     ['sMTTR','sMTBF'].forEach(id => document.getElementById(id).className = 'semaforo');
   }
- 
+
   // ── Preventivos ───────────────────────────────
   const prev    = df.filter(r => r.tipo_mantenimiento === 'preventivo');
   const pHechos = prev.filter(r => r.estatus === 'completado').length;
   const pTotal  = prev.length;
   const porc    = pTotal > 0 ? Math.round((pHechos / pTotal) * 100) : 0;
   document.getElementById('kPrev').textContent = `${pHechos} de ${pTotal} (${porc}%)`;
- 
+
   const areas = [...new Set(prev.map(r => r.area))].sort();
   const tBody = document.getElementById('tPrevArea');
   tBody.innerHTML = areas.length ? areas.map(a => {
@@ -568,7 +568,7 @@ function actualizarKPIs(df) {
     return `<tr><td>${a}</td><td>${com} de ${tot} (${p}%)</td></tr>`;
   }).join('') : '<tr><td colspan="2" class="empty-msg">Sin preventivos</td></tr>';
 }
- 
+
 // =============================================
 //  GRÁFICAS
 // =============================================
@@ -581,15 +581,15 @@ const CHART_OPT = {
     x: { grid: { display: false }, ticks: { color: '#888', font: { size: 10 }, autoSkip: false, maxRotation: 35 } }
   }
 };
- 
+
 function mkChart(id, cfg) {
   if (charts[id]) charts[id].destroy();
   charts[id] = new Chart(document.getElementById(id), cfg);
 }
- 
+
 function actualizarGraficas(df) {
   const corr = df.filter(r => r.tipo_mantenimiento === 'correctivo');
- 
+
   // Por área
   const byArea = cnt(corr, r => r.area);
   mkChart('cArea', {
@@ -597,7 +597,7 @@ function actualizarGraficas(df) {
     data: { labels: Object.keys(byArea), datasets: [{ data: Object.values(byArea), backgroundColor: COLOR, borderRadius: 5 }] },
     options: { ...CHART_OPT }
   });
- 
+
   // Por máquina (horizontal)
   const byMaq = Object.entries(cnt(corr, r => r.maquina)).sort((a,b) => b[1]-a[1]);
   const hMaq  = Math.max(190, byMaq.length * 36 + 60);
@@ -614,7 +614,7 @@ function actualizarGraficas(df) {
       }
     }
   });
- 
+
   // Tendencia
   const byFecha  = cnt(corr, r => r.fecha);
   const fechasOrd = Object.keys(byFecha).sort();
@@ -633,7 +633,7 @@ function actualizarGraficas(df) {
     }
   });
 }
- 
+
 // =============================================
 //  TABLA DETALLE
 // =============================================
@@ -641,22 +641,22 @@ function renderTabla(df) {
   const thead = document.getElementById('thDetalle');
   const tbody = document.getElementById('tbDetalle');
   const pag   = document.getElementById('paginacion');
- 
+
   if (!df.length) {
     thead.innerHTML = '';
     tbody.innerHTML = '<tr><td colspan="6" class="empty-msg">Sin registros para este filtro</td></tr>';
     pag.innerHTML = '';
     return;
   }
- 
+
   const cols = Object.keys(df[0]);
   thead.innerHTML = cols.map(c => `<th>${c}</th>`).join('');
- 
+
   const total = Math.ceil(df.length / PG);
   pgActual = Math.min(pgActual, total - 1);
   const slice = df.slice(pgActual * PG, (pgActual + 1) * PG);
   tbody.innerHTML = slice.map(r => '<tr>' + cols.map(c => `<td>${r[c] ?? ''}</td>`).join('') + '</tr>').join('');
- 
+
   pag.innerHTML = '';
   for (let i = 0; i < total; i++) {
     const b = document.createElement('button');
@@ -666,7 +666,7 @@ function renderTabla(df) {
     pag.appendChild(b);
   }
 }
- 
+
 // =============================================
 //  DESCARGAR CSV
 // =============================================
@@ -681,7 +681,7 @@ function descargarCSV() {
   a.download = `mantenimiento_${area}_${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
 }
- 
+
 // =============================================
 //  INIT
 // =============================================
