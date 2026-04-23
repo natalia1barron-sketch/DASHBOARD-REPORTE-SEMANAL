@@ -26,6 +26,7 @@
 --navy: #0B3D91;
 --teal: #00897B;
 --indigo: #3949AB;
+--amber: #FF6F00;
 --radius: 14px;
 --shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
@@ -129,7 +130,7 @@ color: var(--text); outline: none; min-width: 140px; transition: border .2s;
 .btn-dl:hover { background: #082d6e; }
 
 /* ── KPI CARDS ── */
-.kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; margin-bottom: 18px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 14px; margin-bottom: 18px; }
 .kpi-card {
 background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
 padding: 16px 14px 20px; text-align: center; position: relative; overflow: hidden;
@@ -140,9 +141,11 @@ border-top: 5px solid transparent;
 .kpi-card.pink   { border-top-color: var(--pink); }
 .kpi-card.purple { border-top-color: var(--purple); }
 .kpi-card.crimson{ border-top-color: var(--crimson); }
+.kpi-card.amber  { border-top-color: var(--amber); }
 .kpi-label { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .4px; min-height: 28px; display: flex; align-items: center; justify-content: center; line-height: 1.3; }
 .kpi-val { font-size: 26px; font-weight: 700; margin-top: 6px; line-height: 1.1; font-family: 'DM Mono', monospace; }
-.kpi-val.sm { font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+.kpi-val.sm { font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 600; line-height: 1.4; }
+.kpi-sub { font-size: 11px; color: var(--text2); margin-top: 4px; font-family: 'DM Sans', sans-serif; }
 .semaforo { position: absolute; bottom: 0; left: 0; right: 0; height: 5px; border-radius: 0 0 14px 14px; }
 .s-verde   { background: var(--green); }
 .s-amarillo{ background: var(--yellow); }
@@ -206,7 +209,6 @@ display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; bord
 .trend-up   { background: rgba(255,23,68,.1);   color: #FF1744; }
 .trend-down { background: rgba(0,200,83,.1);    color: #00C853; }
 .trend-flat { background: rgba(107,114,128,.1); color: #6b7280; }
-/* MTBF: subir es bueno */
 .trend-up-good   { background: rgba(0,200,83,.1);    color: #00C853; }
 .trend-down-bad  { background: rgba(255,23,68,.1);   color: #FF1744; }
 
@@ -223,6 +225,11 @@ td.center { text-align: center; }
 .pag button:hover:not(.active) { background: var(--border); }
 
 .empty-msg { text-align: center; padding: 28px; color: var(--text2); font-size: 13px; }
+
+/* ── KPI FALLA MÁS CONSTANTE: pill bar ── */
+.falla-bar-wrap { margin-top: 6px; }
+.falla-bar-bg { background: rgba(255,111,0,0.12); border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+.falla-bar-fill { height: 100%; background: var(--amber); border-radius: 4px; transition: width .6s ease; }
 </style>
 </head>
 <body>
@@ -302,30 +309,41 @@ Pasos en Google Sheets: <b>Extensiones → Apps Script</b> → pegar el código 
 </div>
 </div>
 
-<!-- KPIs -->
+<!-- KPIs — ahora 6 columnas (se agrega Falla más constante) -->
 <div class="kpi-grid">
-<div class="kpi-card blue">
-<div class="kpi-label"># Fallas correctivas</div>
-<div class="kpi-val" id="kFallas">—</div>
-</div>
-<div class="kpi-card orange">
-<div class="kpi-label">Downtime (min)</div>
-<div class="kpi-val" id="kDT">—</div>
-</div>
-<div class="kpi-card pink" style="padding-bottom:22px">
-<div class="kpi-label">MTTR (min)</div>
-<div class="kpi-val" id="kMTTR">—</div>
-<div class="semaforo" id="sMTTR"></div>
-</div>
-<div class="kpi-card purple" style="padding-bottom:22px">
-<div class="kpi-label">MTBF (h)</div>
-<div class="kpi-val" id="kMTBF">—</div>
-<div class="semaforo" id="sMTBF"></div>
-</div>
-<div class="kpi-card crimson">
-<div class="kpi-label">Máquina crítica</div>
-<div class="kpi-val sm" id="kMaq">—</div>
-</div>
+  <div class="kpi-card blue">
+    <div class="kpi-label"># Fallas correctivas</div>
+    <div class="kpi-val" id="kFallas">—</div>
+  </div>
+  <div class="kpi-card orange">
+    <div class="kpi-label">Downtime (min)</div>
+    <div class="kpi-val" id="kDT">—</div>
+  </div>
+  <div class="kpi-card pink" style="padding-bottom:22px">
+    <div class="kpi-label">MTTR (min)</div>
+    <div class="kpi-val" id="kMTTR">—</div>
+    <div class="semaforo" id="sMTTR"></div>
+  </div>
+  <div class="kpi-card purple" style="padding-bottom:22px">
+    <div class="kpi-label">MTBF (h)</div>
+    <div class="kpi-val" id="kMTBF">—</div>
+    <div class="semaforo" id="sMTBF"></div>
+  </div>
+  <div class="kpi-card crimson">
+    <div class="kpi-label">Máquina crítica</div>
+    <div class="kpi-val sm" id="kMaq">—</div>
+  </div>
+  <!-- ★ NUEVO KPI: FALLA MÁS CONSTANTE -->
+  <div class="kpi-card amber">
+    <div class="kpi-label">Falla más constante</div>
+    <div class="kpi-val sm" id="kFallaTop">—</div>
+    <div class="kpi-sub" id="kFallaTopSub"></div>
+    <div class="falla-bar-wrap" id="kFallaBarWrap" style="display:none">
+      <div class="falla-bar-bg">
+        <div class="falla-bar-fill" id="kFallaBar" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- PREVENTIVOS -->
@@ -526,7 +544,9 @@ async function cargarDatos() {
       tipo_mantenimiento: (r.tipo_mantenimiento || '').toLowerCase(),
       estatus:            (r.estatus || '').toLowerCase(),
       area:               r.area || '',
-      maquina:            r.maquina || ''
+      maquina:            r.maquina || '',
+      // Campo de tipo/descripción de falla — adapta el nombre de columna si es diferente
+      tipo_falla:         r.tipo_falla || r.falla || r.descripcion_falla || r.descripcion || ''
     }));
     poblarFiltros();
     pgActual = 0;
@@ -589,7 +609,8 @@ function calcularMinutosOperativos(inicio, fin, horasPorDia) {
 }
 
 // =============================================
-//  SEMANA ISO  →  "Sem WW · DD Mmm – DD Mmm"
+//  SEMANA ISO  →  número de semana AJUSTADO -1
+//  (la semana real W13 se muestra como W12, etc.)
 // =============================================
 function getISOWeek(dateStr) {
   const d = new Date(dateStr + 'T00:00:00');
@@ -599,17 +620,22 @@ function getISOWeek(dateStr) {
   const diff = Math.floor((d - startOfWeek1) / 86400000);
   const week = Math.floor(diff / 7) + 1;
   const year = d.getFullYear();
-  return `${year}-W${String(week).padStart(2,'0')}`;
+  // ★ AJUSTE -1: restamos 1 al número de semana
+  const weekAjustada = week - 1;
+  return `${year}-W${String(weekAjustada).padStart(2,'0')}`;
 }
 
 function semanaLabel(key) {
-  // key = "YYYY-Www"  → lunes de esa semana
+  // key = "YYYY-Www"  (ya con ajuste -1)
+  // Recalculamos las fechas del lunes/domingo de la semana REAL (week+1)
   const [year, w] = key.split('-W');
+  const weekReal = parseInt(w) + 1; // invertimos el ajuste para obtener fechas correctas
   const jan4 = new Date(+year, 0, 4);
   const lunes = new Date(jan4);
-  lunes.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7) + (parseInt(w) - 1) * 7);
+  lunes.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7) + (weekReal - 1) * 7);
   const domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 6);
   const fmt = d => d.toLocaleDateString('es-MX', { day: '2-digit', month: 'short' });
+  // El número de Semana que mostramos es el ajustado (w), el período es el real
   return `Sem ${w} · ${fmt(lunes)} – ${fmt(domingo)}`;
 }
 
@@ -619,7 +645,6 @@ function semanaLabel(key) {
 function calcularSemanal(corr, hDia) {
   if (!corr.length) return [];
 
-  // Agrupar por semana ISO
   const semMap = {};
   corr.forEach(r => {
     const wk = getISOWeek(r.fecha);
@@ -695,12 +720,54 @@ function actualizarKPIs(df) {
     document.getElementById('sMTBF').className =
       'semaforo ' + (mtbf >= u1 ? 's-verde' : mtbf >= u2 ? 's-amarillo' : 's-rojo');
 
-    const maqCnt = cnt(corr, r => r.maquina);
-    const top    = Object.entries(maqCnt).sort((a,b) => b[1]-a[1])[0];
-    document.getElementById('kMaq').textContent = top ? `${top[0]} (${top[1]} fallas)` : '—';
+    // ── Máquina crítica: primero por downtime acumulado, empate → más fallas ──
+    const maqStats = {};
+    corr.forEach(r => {
+      if (!maqStats[r.maquina]) maqStats[r.maquina] = { fallas: 0, downtime: 0 };
+      maqStats[r.maquina].fallas   += 1;
+      maqStats[r.maquina].downtime += r.tiempo_min;
+    });
+    const topMaq = Object.entries(maqStats)
+      .sort((a, b) => b[1].downtime - a[1].downtime || b[1].fallas - a[1].fallas)[0];
+    document.getElementById('kMaq').textContent = topMaq
+      ? `${topMaq[0]} (${topMaq[1].downtime.toFixed(0)} min / ${topMaq[1].fallas} fallas)`
+      : '—';
+
+    // ── Falla más constante: dentro de la máquina crítica ──
+    if (topMaq) {
+      const corrTopMaq = corr.filter(r => r.maquina === topMaq[0]);
+      const fallaCnt   = cnt(corrTopMaq, r => r.tipo_falla && r.tipo_falla.trim() !== '' ? r.tipo_falla.trim() : '(sin clasificar)');
+      const fallaEntries = Object.entries(fallaCnt).sort((a, b) => b[1] - a[1]);
+      if (fallaEntries.length > 0) {
+        const [topFalla, topFallaCnt] = fallaEntries[0];
+        const dtTopFalla = corrTopMaq
+          .filter(r => (r.tipo_falla && r.tipo_falla.trim() !== '' ? r.tipo_falla.trim() : '(sin clasificar)') === topFalla)
+          .reduce((s, r) => s + r.tiempo_min, 0);
+        const pct = dt > 0 ? Math.round((dtTopFalla / dt) * 100) : 0;
+        document.getElementById('kFallaTop').textContent = topFalla;
+        document.getElementById('kFallaTopSub').textContent =
+          `${dtTopFalla.toFixed(0)} min · ${pct}% del tiempo muerto total`;
+        document.getElementById('kFallaBarWrap').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('kFallaBar').style.width = pct + '%';
+        }, 200);
+      } else {
+        document.getElementById('kFallaTop').textContent = '—';
+        document.getElementById('kFallaTopSub').textContent = '';
+        document.getElementById('kFallaBarWrap').style.display = 'none';
+      }
+    } else {
+      document.getElementById('kFallaTop').textContent = '—';
+      document.getElementById('kFallaTopSub').textContent = '';
+      document.getElementById('kFallaBarWrap').style.display = 'none';
+    }
+
   } else {
     ['kMTTR','kMTBF','kMaq'].forEach(id => document.getElementById(id).textContent = '—');
     ['sMTTR','sMTBF'].forEach(id => document.getElementById(id).className = 'semaforo');
+    document.getElementById('kFallaTop').textContent = '—';
+    document.getElementById('kFallaTopSub').textContent = '';
+    document.getElementById('kFallaBarWrap').style.display = 'none';
   }
 
   const prev    = df.filter(r => r.tipo_mantenimiento === 'preventivo');
@@ -832,11 +899,11 @@ function actualizarSemanal(df) {
     }).join('');
   }
 
-  const labels = sems.map(s => `Sem ${s.wk.split('-W')[1]}`);
-  const mttrVals = sems.map(s => +s.mttr.toFixed(2));
-  const mtbfVals = sems.map(s => +s.mtbf.toFixed(2));
+  const labels    = sems.map(s => `Sem ${s.wk.split('-W')[1]}`);
+  const mttrVals  = sems.map(s => +s.mttr.toFixed(2));
+  const mtbfVals  = sems.map(s => +s.mtbf.toFixed(2));
   const fallasVals = sems.map(s => s.fallas);
-  const dtVals = sems.map(s => +s.dt.toFixed(0));
+  const dtVals    = sems.map(s => +s.dt.toFixed(0));
 
   // ── Gráfica MTTR semanal ──────────────────────
   mkChart('cMTTRSem', {
@@ -844,35 +911,9 @@ function actualizarSemanal(df) {
     data: {
       labels,
       datasets: [
-        {
-          label: 'MTTR (min)',
-          data: mttrVals,
-          borderColor: '#CD3278',
-          backgroundColor: 'rgba(205,50,120,0.08)',
-          tension: 0.35,
-          pointRadius: 5,
-          pointBackgroundColor: '#CD3278',
-          fill: true,
-          borderWidth: 2.5
-        },
-        {
-          label: 'Límite aceptable (60 min)',
-          data: Array(labels.length).fill(60),
-          borderColor: '#FF1744',
-          borderDash: [6,4],
-          borderWidth: 1.5,
-          pointRadius: 0,
-          fill: false
-        },
-        {
-          label: 'Meta (40 min)',
-          data: Array(labels.length).fill(40),
-          borderColor: '#00C853',
-          borderDash: [6,4],
-          borderWidth: 1.5,
-          pointRadius: 0,
-          fill: false
-        }
+        { label: 'MTTR (min)', data: mttrVals, borderColor: '#CD3278', backgroundColor: 'rgba(205,50,120,0.08)', tension: 0.35, pointRadius: 5, pointBackgroundColor: '#CD3278', fill: true, borderWidth: 2.5 },
+        { label: 'Límite aceptable (60 min)', data: Array(labels.length).fill(60), borderColor: '#FF1744', borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false },
+        { label: 'Meta (40 min)', data: Array(labels.length).fill(40), borderColor: '#00C853', borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false }
       ]
     },
     options: {
@@ -882,8 +923,7 @@ function actualizarSemanal(df) {
         tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y} min` } }
       },
       scales: {
-        y: { beginAtZero: true, title: { display: true, text: 'min', font: { size: 10 }, color: '#888' },
-             grid: { color: 'rgba(128,128,128,0.1)' }, ticks: { color: '#888', font: { size: 10 } } },
+        y: { beginAtZero: true, title: { display: true, text: 'min', font: { size: 10 }, color: '#888' }, grid: { color: 'rgba(128,128,128,0.1)' }, ticks: { color: '#888', font: { size: 10 } } },
         x: { grid: { display: false }, ticks: { color: '#888', font: { size: 10 }, autoSkip: false, maxRotation: 30 } }
       }
     }
@@ -895,35 +935,9 @@ function actualizarSemanal(df) {
     data: {
       labels,
       datasets: [
-        {
-          label: 'MTBF (h)',
-          data: mtbfVals,
-          borderColor: '#3949AB',
-          backgroundColor: 'rgba(57,73,171,0.08)',
-          tension: 0.35,
-          pointRadius: 5,
-          pointBackgroundColor: '#3949AB',
-          fill: true,
-          borderWidth: 2.5
-        },
-        {
-          label: 'Meta (60 h)',
-          data: Array(labels.length).fill(60),
-          borderColor: '#00C853',
-          borderDash: [6,4],
-          borderWidth: 1.5,
-          pointRadius: 0,
-          fill: false
-        },
-        {
-          label: 'Límite aceptable (40 h)',
-          data: Array(labels.length).fill(40),
-          borderColor: '#FF1744',
-          borderDash: [6,4],
-          borderWidth: 1.5,
-          pointRadius: 0,
-          fill: false
-        }
+        { label: 'MTBF (h)', data: mtbfVals, borderColor: '#3949AB', backgroundColor: 'rgba(57,73,171,0.08)', tension: 0.35, pointRadius: 5, pointBackgroundColor: '#3949AB', fill: true, borderWidth: 2.5 },
+        { label: 'Meta (60 h)', data: Array(labels.length).fill(60), borderColor: '#00C853', borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false },
+        { label: 'Límite aceptable (40 h)', data: Array(labels.length).fill(40), borderColor: '#FF1744', borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false }
       ]
     },
     options: {
@@ -933,8 +947,7 @@ function actualizarSemanal(df) {
         tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y} h` } }
       },
       scales: {
-        y: { beginAtZero: true, title: { display: true, text: 'horas', font: { size: 10 }, color: '#888' },
-             grid: { color: 'rgba(128,128,128,0.1)' }, ticks: { color: '#888', font: { size: 10 } } },
+        y: { beginAtZero: true, title: { display: true, text: 'horas', font: { size: 10 }, color: '#888' }, grid: { color: 'rgba(128,128,128,0.1)' }, ticks: { color: '#888', font: { size: 10 } } },
         x: { grid: { display: false }, ticks: { color: '#888', font: { size: 10 }, autoSkip: false, maxRotation: 30 } }
       }
     }
@@ -946,44 +959,16 @@ function actualizarSemanal(df) {
     data: {
       labels,
       datasets: [
-        {
-          label: 'Fallas',
-          data: fallasVals,
-          backgroundColor: 'rgba(52,152,219,0.75)',
-          borderRadius: 5,
-          yAxisID: 'yFallas'
-        },
-        {
-          label: 'Downtime (min)',
-          data: dtVals,
-          type: 'line',
-          borderColor: '#f39c12',
-          backgroundColor: 'rgba(243,156,18,0.08)',
-          tension: 0.3,
-          pointRadius: 4,
-          pointBackgroundColor: '#f39c12',
-          fill: false,
-          borderWidth: 2.5,
-          yAxisID: 'yDT'
-        }
+        { label: 'Fallas', data: fallasVals, backgroundColor: 'rgba(52,152,219,0.75)', borderRadius: 5, yAxisID: 'yFallas' },
+        { label: 'Downtime (min)', data: dtVals, type: 'line', borderColor: '#f39c12', backgroundColor: 'rgba(243,156,18,0.08)', tension: 0.3, pointRadius: 4, pointBackgroundColor: '#f39c12', fill: false, borderWidth: 2.5, yAxisID: 'yDT' }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, boxWidth: 18, padding: 12 } }
-      },
+      plugins: { legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, boxWidth: 18, padding: 12 } } },
       scales: {
-        yFallas: {
-          type: 'linear', position: 'left', beginAtZero: true,
-          title: { display: true, text: 'Fallas', font: { size: 10 }, color: '#3498db' },
-          grid: { color: 'rgba(128,128,128,0.1)' }, ticks: { color: '#3498db', font: { size: 10 } }
-        },
-        yDT: {
-          type: 'linear', position: 'right', beginAtZero: true,
-          title: { display: true, text: 'Downtime (min)', font: { size: 10 }, color: '#f39c12' },
-          grid: { drawOnChartArea: false }, ticks: { color: '#f39c12', font: { size: 10 } }
-        },
+        yFallas: { type: 'linear', position: 'left', beginAtZero: true, title: { display: true, text: 'Fallas', font: { size: 10 }, color: '#3498db' }, grid: { color: 'rgba(128,128,128,0.1)' }, ticks: { color: '#3498db', font: { size: 10 } } },
+        yDT:     { type: 'linear', position: 'right', beginAtZero: true, title: { display: true, text: 'Downtime (min)', font: { size: 10 }, color: '#f39c12' }, grid: { drawOnChartArea: false }, ticks: { color: '#f39c12', font: { size: 10 } } },
         x: { grid: { display: false }, ticks: { color: '#888', font: { size: 10 }, autoSkip: false, maxRotation: 30 } }
       }
     }
