@@ -640,7 +640,25 @@ function semanaLabel(key) {
 }
 
 // =============================================
+//  LUNES Y DOMINGO REALES DE UNA SEMANA (key con ajuste -1)
+//  Devuelve { iniSem: 'YYYY-MM-DD', finSem: 'YYYY-MM-DD' }
+// =============================================
+function lunesdomingoDeKey(key) {
+  const [year, w] = key.split('-W');
+  const weekReal  = parseInt(w) + 1; // deshacemos el ajuste -1 para obtener fechas correctas
+  const jan4  = new Date(+year, 0, 4);
+  const lunes = new Date(jan4);
+  lunes.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7) + (weekReal - 1) * 7);
+  const domingo = new Date(lunes);
+  domingo.setDate(lunes.getDate() + 6);
+  const fmt = d => d.toISOString().slice(0, 10);
+  return { iniSem: fmt(lunes), finSem: fmt(domingo) };
+}
+
+// =============================================
 //  CALCULAR MTTR / MTBF POR SEMANA
+//  → usa lunes–domingo completo de cada semana ISO
+//    para que el MTBF sea consistente con el KPI global
 // =============================================
 function calcularSemanal(corr, hDia) {
   if (!corr.length) return [];
@@ -648,22 +666,22 @@ function calcularSemanal(corr, hDia) {
   const semMap = {};
   corr.forEach(r => {
     const wk = getISOWeek(r.fecha);
-    if (!semMap[wk]) semMap[wk] = { fechas: [], registros: [] };
-    semMap[wk].fechas.push(r.fecha);
+    if (!semMap[wk]) semMap[wk] = { registros: [] };
     semMap[wk].registros.push(r);
   });
 
   const semanas = Object.keys(semMap).sort();
   const resultado = semanas.map(wk => {
-    const { fechas, registros } = semMap[wk];
-    const fechasOrd = [...fechas].sort();
-    const iniSem = fechasOrd[0];
-    const finSem = fechasOrd[fechasOrd.length - 1];
+    const { registros } = semMap[wk];
+
+    // ★ Usamos siempre el lunes y domingo reales de la semana
+    const { iniSem, finSem } = lunesdomingoDeKey(wk);
 
     const fallas = registros.length;
-    const dt = registros.reduce((s, r) => s + r.tiempo_min, 0);
-    const mttr = fallas > 0 ? dt / fallas : 0;
+    const dt     = registros.reduce((s, r) => s + r.tiempo_min, 0);
+    const mttr   = fallas > 0 ? dt / fallas : 0;
 
+    // Tiempo operativo de la semana completa (lun–dom), menos el downtime
     const tTotal = calcularMinutosOperativos(iniSem, finSem, hDia);
     const tOp    = Math.max(0, tTotal - dt);
     const mtbf   = fallas > 0 ? (tOp / fallas) / 60 : 0;
